@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awesome Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #calculator {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #ecf0f1;
+        }
+
+        #result {
+            padding: 20px;
+            font-size: 2em;
+            text-align: right;
+            background-color: #3498db;
+            color: #fff;
+            border-bottom: 1px solid #2980b9;
+        }
+
+        #buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        button.operator {
+            grid-column: span 4;
+            background-color: #e74c3c;
+        }
+
+        button.double {
+            grid-column: span 2;
+        }
+
+        button.tall {
+            grid-row: span 2;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:active {
+            background-color: #1f6692;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="calculator">
+        <div id="result">0</div>
+        <div id="buttons">
+            <button onclick="clearResult()">C</button>
+            <button onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendOperator('/')">/</button>
+            <button class="tall" onclick="appendNumber('7')">7</button>
+            <button class="tall" onclick="appendNumber('8')">8</button>
+            <button class="tall" onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('*')">*</button>
+            <button class="tall" onclick="appendNumber('4')">4</button>
+            <button class="tall" onclick="appendNumber('5')">5</button>
+            <button class="tall" onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>
+            <button class="tall" onclick="appendNumber('1')">1</button>
+            <button class="tall" onclick="appendNumber('2')">2</button>
+            <button class="tall" onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+            <button class="double" onclick="appendNumber('0')">0</button>
+            <button onclick="appendDecimal()">.</button>
+            <button class="operator" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let currentResult = '0';
+
+        function updateResult() {
+            document.getElementById('result').innerText = currentResult;
+        }
+
+        function appendNumber(number) {
+            if (currentResult === '0' || currentResult === 'Error') {
+                currentResult = number;
+            } else {
+                currentResult += number;
+            }
+            updateResult();
+        }
+
+        function appendOperator(operator) {
+            if (currentResult !== 'Error') {
+                currentResult += ' ' + operator + ' ';
+                updateResult();
+            }
+        }
+
+        function appendDecimal() {
+            if (!currentResult.includes('.') && currentResult !== 'Error') {
+                currentResult += '.';
+                updateResult();
+            }
+        }
+
+        function clearResult() {
+            currentResult = '0';
+            updateResult();
+        }
+
+        function deleteLast() {
+            if (currentResult !== 'Error') {
+                if (currentResult.length === 1 || (currentResult.length === 2 && currentResult.startsWith('-'))) {
+                    currentResult = '0';
+                } else {
+                    currentResult = currentResult.slice(0, -1);
+                }
+                updateResult();
+            }
+        }
+
+        function calculateResult() {
+            try {
+                currentResult = eval(currentResult).toString();
+                updateResult();
+            } catch (error) {
+                currentResult = 'Error';
+                updateResult();
+            }
+        }
+    </script>
+
+</body>
+</html>
